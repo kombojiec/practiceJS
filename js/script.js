@@ -97,8 +97,7 @@ setTimer(deadLine);
   //=====================Modal window==================================
   
   const modalTrigger = document.querySelectorAll('[data-modal]'),
-      modal = document.querySelector('.modal'),
-      close = document.querySelector('[data-close]');
+      modal = document.querySelector('.modal');
 
     function openModal(){
       modal.classList.add('show');
@@ -118,10 +117,9 @@ setTimer(deadLine);
     document.body.style.overflow = 'visible';    
   }
 
-  close.addEventListener('click', closeModal);
   
   modal.addEventListener('click', (event)=>{
-    if(event.target === modal){
+    if(event.target === modal || event.target.getAttribute('data-close') == ''){
       closeModal();    
     }
   });
@@ -132,7 +130,7 @@ setTimer(deadLine);
     }
   });
 
-  let modalTimerId = setTimeout(openModal, 15000);
+  // let modalTimerId = setTimeout(openModal, 15000);
 
   function openModalscroll(){
     if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
@@ -140,7 +138,7 @@ setTimer(deadLine);
     }
   }
 
-  window.addEventListener('scroll', openModalscroll);
+  // window.addEventListener('scroll', openModalscroll);
 
 
   // =======================menuCards===========================
@@ -170,7 +168,6 @@ setTimer(deadLine);
       }else{
         this.classes.forEach(className => element.classList.add(className));
       }
-      // element.classList.add('menu__item');
       element.innerHTML = `
         <img src=${this.src} alt=${this.alt}>
         <h3 class="menu__item-subtitle">${this.title}</h3>
@@ -185,34 +182,259 @@ setTimer(deadLine);
     }
   }
 
-  new CreateCard("img/tabs/vegy.jpg", 
-    "vegy", 
-    'Меню "Фитнес"', 
-    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-    5,
-    '.menu .container',
-    'menu__item',
-    'someClass',
-    ).createContent();
+  // const getMenu = async (url) => {
+  //   const res = await fetch(url);
+  //   if(!res.ok){
+  //     throw new Error(`Error with status ` + res.status)
+  //   }
+  //   return await res.json();
+  // }
 
-  new CreateCard("img/tabs/elite.jpg", 
-    "elite", 
-    'Меню “Премиум”', 
-    'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-    7,
-    '.menu .container'
-    ).createContent();
+  // getMenu('http://localhost:3000/menu')
+  // .then(data => {
+  //   data.forEach(({img, altimg, title, descr, price}) => {
+  //     new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
+  //   });
+  // })
 
-
-  new CreateCard("img/tabs/post.jpg", 
-  "post", 
-    'Меню "Постное"', 
-    'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-    6,
-    '.menu .container'
-    ).createContent();
-
+  axios.get('http://localhost:3000/menu')
+  .then(res => {
+    res.data.forEach(({img, altimg, title, descr, price}) => {
+      new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
+    });
+  })
   
+    // ================ Отправка форм ====================
+
+    const forms = document.querySelectorAll('form');
+
+    const message = {
+      loading: 'Загрузка',
+      success: 'Спасибо, мы скоро свяжемся с вами',
+      failure: 'Упс... Что-то пошло не так...',
+    }
+
+    const postData = async (url, data) => {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: data,
+      })
+      return await res.json();
+    }
+
+    function bindPostData(form){
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const statusMessage = document.createElement('div');
+        statusMessage.classList.add('status');
+        statusMessage.textContent = message.loading;
+        form.append(statusMessage);
+
+        const formData = new FormData(form);
+        const jsonData = JSON.stringify(Object.fromEntries(formData.entries()));
+
+        postData('http://localhost:3000/requests', jsonData)
+        .then(data => {
+          console.log(data)
+          statusMessage.textContent = message.success;
+          showThanksModal(message.success);          
+          statusMessage.remove();
+        })
+        .catch((error) => {
+          console.log(error);
+          showThanksModal(message.failure);
+        })
+        .finally(() => {
+          form.reset();
+        })
+
+      })
+    }
+
+    forms.forEach(form => {
+      bindPostData(form);
+    })
+
+    function showThanksModal(message){
+      const prevModalDialog = document.querySelector('.modal__dialog');
+      prevModalDialog.classList.add('hide');
+      openModal();
+      const thanksModal = document.createElement('div');
+      thanksModal.classList.add('modal__dialog');
+      thanksModal.innerHTML = `
+        <div class="modal__content">
+          <div class="modal__close" data-close>&times;</div>
+          <div class="modal__title">${message}</div>
+        </div>
+      `;
+
+      document.querySelector('.modal').append(thanksModal);
+      setTimeout(() => {
+        thanksModal.remove();
+        prevModalDialog.classList.add('show');
+        prevModalDialog.classList.remove('hide');
+        closeModal();
+      },2000)
+    }
+
+    // fetch('http://localhost:3000/menu')
+    // .then(data => data.json())
+    // .then(data => console.log(data))
+
+
+
+
+    // ============ Slider ====================>>
+    const sliderWrapper = document.querySelector('.offer__slider-wrapper');
+    const container = sliderWrapper.querySelector('.offer__lsider-inner')
+    const slides = document.querySelectorAll('.offer__slide');
+    const prevSlideButton = document.querySelector('.offer__slider-prev');
+    const nextSlideButton = document.querySelector('.offer__slider-next');
+    const currentSlide = document.querySelector('#current');
+    const totalSlide = document.querySelector('#total');
+    const width = parseInt(window.getComputedStyle(slides[0]).width);
+    let currentIndex = 0;
+
+    function setTextValue(value, container){
+      container.textContent = value;
+    }
+
+    setTextValue(currentIndex +1, currentSlide);
+    setTextValue(slides.length, totalSlide);
+
+    slides.forEach(slide => {
+      slide.style.width = width + 'px';
+    })
+
+    container.style.width = slides.length * width +'px';
+    container.style.display = 'flex';
+    container.style.transition = "all 0.5s linear"
+    sliderWrapper.style.overflow = 'hidden';
+
+    nextSlideButton.addEventListener('click', () => {
+      moveSlideAhead()
+    })
+
+    function moveSlideAhead(){
+      ++currentIndex;
+      if(currentIndex * width > width * (slides.length -1)){
+        container.style.transform = `translateX(0px)`;
+        currentIndex = 0;
+      }
+      container.style.transform = `translateX(${-currentIndex * width}px)`;
+      setTextValue(currentIndex +1, currentSlide);
+      changeNavigationButton(currentIndex);
+    }
+
+    prevSlideButton.addEventListener('click', () => {
+      moveSlideBack();
+    })
+
+    function moveSlideBack(){
+      --currentIndex;
+      if(currentIndex < 0){
+        currentIndex = slides.length -1;
+        container.style.transform = `translateX(${-currentIndex * width}px)`;
+      }      
+      container.style.transform = `translateX(${-currentIndex * width}px)`;
+      setTextValue(currentIndex +1, currentSlide);
+      changeNavigationButton(currentIndex);
+    }
+
+    function moveSlideOnPosition(index){
+      currentIndex = index;
+      container.style.transform = `translateX(${-currentIndex * width}px)`;
+      setTextValue(index +1, currentSlide);
+      changeNavigationButton(currentIndex);
+    }
+
+    // ======= Создание навигации для слайдера==========
+    const dots = document.createElement('ul');
+    dots.classList.add('carousel-indicators');
+    sliderWrapper.style.position = 'relative';
+    sliderWrapper.append(dots);
+    
+    for(let i = 0; i < slides.length; ++i){
+      const dot = document.createElement('li');
+      i == 0? dot.classList.add('dot', 'active'): dot.classList.add('dot');
+      dot.setAttribute(`data-dot`, i)
+      dots.append(dot);
+    }    
+    const dotsList = dots.querySelectorAll('.dot');
+
+    function changeNavigationButton(index){
+      dotsList.forEach((dot, i) => {
+        if(dot.classList.contains('active')){
+          dot.classList.remove('active');
+        }
+        if(i == index){
+          dot.classList.add('active');
+        }
+      })
+    }
+
+    dotsList.forEach(dot => {
+      dot.addEventListener('click', event => {
+        const index = +event.target.getAttribute('data-dot');
+        moveSlideOnPosition(index);
+      })
+    })
+    
+    
+
+    //  Реализация слайдера с display: none;
+
+    // slides.forEach((slide, i) => {
+    //   hideSlide(i);
+    // })
+    // showSlide(0);
+    // setTextValue(setZero(1), currentSlide);
+    // setTextValue(setZero(slides.length), totalSlide);
+
+    // function showSlide(index){
+    //   slides[index].classList.remove('hide');
+    //   slides[index].classList.add('active', 'fade');
+    // }
+
+    // function hideSlide(index){
+    //   slides[index].classList.add('hide');
+    //   slides[index].classList.remove('active', 'fade');
+    // }
+
+    // function returnActiveSlide(){
+    //   let active = undefined;
+    //   slides.forEach((item, index) => {
+    //     if(item.classList.contains('active')){
+    //       active = index; 
+    //     }
+    //   })
+    //   return active;
+    // }
+
+    // nextSlideButton.addEventListener('click', () => {
+    //   let active = returnActiveSlide();
+    //   let next = active +1;
+    //   next >= slides.length? next = 0: next;
+    //   hideSlide(active);
+    //   showSlide(next)
+    //   setTextValue(setZero(next +1), currentSlide);
+    // })
+
+    // prevSlideButton.addEventListener('click', () => {
+    //   let active = returnActiveSlide();
+    //   let prev = active -1;
+    //   prev < 0 ? prev = slides.length -1: prev;
+    //   hideSlide(active);
+    //   showSlide(prev)
+    //   setTextValue(setZero(prev +1), currentSlide);
+    // })
+    
+
+
 
 }); //=======================================================
 
