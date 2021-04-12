@@ -1,2 +1,2 @@
 # practiceJS
-Just  practice with vanilla JS
+Проект по чужой вёрстке, предназначен для отработки основного функционала на сайтах на ванильном JavaScript.
