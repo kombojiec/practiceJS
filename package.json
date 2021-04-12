@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/kombojiec/practiceJS#readme",
   "dependencies": {
-    "json-server": "^0.16.3"
+    "json-server": "^0.16.3",
+    "webpack": "^5.31.2",
+    "webpack-cli": "^4.6.0"
   }
 }
