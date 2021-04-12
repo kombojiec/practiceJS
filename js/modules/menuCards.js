@@ -38,21 +38,6 @@ function menuCards(){
     }
   }
 
-  // const getMenu = async (url) => {
-  //   const res = await fetch(url);
-  //   if(!res.ok){
-  //     throw new Error(`Error with status ` + res.status)
-  //   }
-  //   return await res.json();
-  // }
-
-  // getMenu('http://localhost:3000/menu')
-  // .then(data => {
-  //   data.forEach(({img, altimg, title, descr, price}) => {
-  //     new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
-  //   });
-  // })
-
   axios.get('http://localhost:3000/menu')
   .then(res => {
     res.data.forEach(({img, altimg, title, descr, price}) => {
@@ -61,4 +46,4 @@ function menuCards(){
   })
 }
 
-module.exports = menuCards;
+export default menuCards;

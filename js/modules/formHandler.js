@@ -1,21 +1,13 @@
-function formHandler(){
+import {openModal, closeModal} from './modal';
+import {postData} from './services';
+
+function formHandler(modalSelector, modalTimerId){
   const forms = document.querySelectorAll('form');
 
   const message = {
     loading: 'Загрузка',
     success: 'Спасибо, мы скоро свяжемся с вами',
     failure: 'Упс... Что-то пошло не так...',
-  }
-
-  const postData = async (url, data) => {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: data,
-    })
-    return await res.json();
   }
 
   function bindPostData(form){
@@ -55,7 +47,7 @@ function formHandler(){
   function showThanksModal(message){
     const prevModalDialog = document.querySelector('.modal__dialog');
     prevModalDialog.classList.add('hide');
-    openModal();
+    openModal(modalSelector, modalTimerId);
     const thanksModal = document.createElement('div');
     thanksModal.classList.add('modal__dialog');
     thanksModal.innerHTML = `
@@ -70,13 +62,9 @@ function formHandler(){
       thanksModal.remove();
       prevModalDialog.classList.add('show');
       prevModalDialog.classList.remove('hide');
-      closeModal();
+      closeModal(modalSelector);
     },2000)
   }
-
-  // fetch('http://localhost:3000/menu')
-  // .then(data => data.json())
-  // .then(data => console.log(data))
 }
 
-module.exports = formHandler;
+export default formHandler;

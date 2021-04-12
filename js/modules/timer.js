@@ -55,4 +55,4 @@ function timer(){
   setTimer(deadLine);
 }
 
-module.exports = timer;
+export default timer;

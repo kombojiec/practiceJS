@@ -1,23 +1,29 @@
 'use strict';
-window.addEventListener("DOMContentLoaded", () => {  
 
-  const calculator = require('./modules/calculator');
-  const formHandler = require('./modules/formHandler');
-  const menuCards = require('./modules/menuCards');
-  const modal = require('./modules/modal');
-  const slider = require('./modules/slider');
-  const tabs = require('./modules/tabs');
-  const timer = require('./modules/timer');
+import calculator from './modules/calculator';
+import formHandler from './modules/formHandler';
+import menuCards from './modules/menuCards';
+import modal from './modules/modal';
+import slider from './modules/slider';
+import tabs from './modules/tabs';
+import timer from './modules/timer';
+import {openModal} from './modules/modal';
 
+
+// window.addEventListener("DOMContentLoaded", () => {  
+  
+  const modalTimerId = setTimeout(() => openModal('.modal', modalTimerId), 5000);
+  
   calculator();
-  formHandler();
+  formHandler('.modal');
   menuCards();
-  modal();
+  modal('[data-modal]', '.modal', modalTimerId);
   slider();
   tabs();
   timer();
-
   
-}); //========================== End of file =============================>>>
+  
+  export default modalTimerId;
+// }); //========================== End of file =============================>>>
 
 
