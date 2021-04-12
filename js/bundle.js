@@ -605,7 +605,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 function timer(){
-  const deadLine = new Date(Date.parse(new Date()) + (1000 * 60 * 60 *24) * 1.255);
+  // const deadLine = new Date(Date.parse(new Date()) + (1000 * 60 * 60 *24) * 1.255);
+  const today = new Date().getDate();
+  const mounth = new Date().getMonth()
+  const year = new Date().getFullYear()
+  const deadLine = new Date(year, mounth, today+2);
+  const mounths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+  const mounthText = document.querySelector('#mounthText');
+  const dateText = document.querySelector('#dateText');
+  dateText.textContent = today + 2;
+  dateText.mounthContent = mounths[mounth];
+  // console.log(dateText);
+  // console.log(mounthText);
+  // console.log(new Date(year, mounth, today));
+  // console.log(deadLine);
   
   function getRemnant(deadLine){
     const currentTime = new Date();
