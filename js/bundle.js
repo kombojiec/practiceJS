@@ -2,6 +2,44 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./js/constants.js":
+/*!*************************!*\
+  !*** ./js/constants.js ***!
+  \*************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const menu = [
+  {
+    "img": "img/tabs/vegy.jpg",
+    "altimg": "vegy",
+    "title": "Меню 'Фитнес'",
+    "descr": "Меню 'Фитнес' - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
+    "price": 9
+  },
+  {
+    "img": "img/tabs/post.jpg",
+    "altimg": "post",
+    "title": "Меню 'Постное'",
+    "descr": "Меню 'Постное' - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.",
+    "price": 14
+  },
+  {
+    "img": "img/tabs/elite.jpg",
+    "altimg": "elite",
+    "title": "Меню 'Премиум'",
+    "descr": "В меню 'Премиум' мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!",
+    "price": 21
+  }
+]
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (menu);
+
+/***/ }),
+
 /***/ "./js/modules/calculator.js":
 /*!**********************************!*\
   !*** ./js/modules/calculator.js ***!
@@ -197,7 +235,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function menuCards(){
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./js/constants.js");
+
+
+function menuCards(){ 
   class CreateCard{
     constructor(src, alt, title, description, price, parent, ...classes){
       this.alt = alt;
@@ -237,11 +278,14 @@ function menuCards(){
     }
   }
 
-  axios.get('http://localhost:3000/menu')
-  .then(res => {
-    res.data.forEach(({img, altimg, title, descr, price}) => {
-      new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
-    });
+  // axios.get('http://localhost:3000/menu')
+  // .then(res => {
+  //   res.data.forEach(({img, altimg, title, descr, price}) => {
+  //     new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
+  //   });
+  // })
+  _constants__WEBPACK_IMPORTED_MODULE_0__.default.forEach(({img, altimg, title, descr, price}) => {
+    new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
   })
 }
 
@@ -282,9 +326,9 @@ function closeModal(modalSelector){
   document.body.style.overflow = 'visible';    
 }
 
-function openModalscroll(modalSelector, modalTimerId){
+function openModalscroll( ){
   if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
-    openModal(modalSelector, modalTimerId);
+    openModal('.modal', _script__WEBPACK_IMPORTED_MODULE_0__.default);
   }
 }
 
@@ -310,7 +354,7 @@ function modal(triggerSelector, modalSelector, modalTimerId){
     }
   });
 
-  window.addEventListener('scroll', () => openModalscroll(modalSelector, modalTimerId));
+  window.addEventListener('scroll', openModalscroll);
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modal);
@@ -339,6 +383,7 @@ const postData = async (url, data) => {
   })
   return await res.json();
 }
+
 
 
 
@@ -649,7 +694,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// window.addEventListener("DOMContentLoaded", () => {  
   
   const modalTimerId = setTimeout(() => (0,_modules_modal__WEBPACK_IMPORTED_MODULE_3__.openModal)('.modal', modalTimerId), 5000);
   
@@ -663,7 +707,8 @@ __webpack_require__.r(__webpack_exports__);
   
   
   /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modalTimerId);
-// }); //========================== End of file =============================>>>
+
+//========================== End of file =============================>>>
 
 
 

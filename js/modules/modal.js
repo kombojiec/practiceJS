@@ -18,9 +18,9 @@ function closeModal(modalSelector){
   document.body.style.overflow = 'visible';    
 }
 
-function openModalscroll(modalSelector, modalTimerId){
+function openModalscroll( ){
   if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
-    openModal(modalSelector, modalTimerId);
+    openModal('.modal', modalTimerId);
   }
 }
 
@@ -46,7 +46,7 @@ function modal(triggerSelector, modalSelector, modalTimerId){
     }
   });
 
-  window.addEventListener('scroll', () => openModalscroll(modalSelector, modalTimerId));
+  window.addEventListener('scroll', openModalscroll);
 }
 
 export default modal;

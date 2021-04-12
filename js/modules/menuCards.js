@@ -1,4 +1,6 @@
-function menuCards(){
+import menu from '../constants';
+
+function menuCards(){ 
   class CreateCard{
     constructor(src, alt, title, description, price, parent, ...classes){
       this.alt = alt;
@@ -38,11 +40,14 @@ function menuCards(){
     }
   }
 
-  axios.get('http://localhost:3000/menu')
-  .then(res => {
-    res.data.forEach(({img, altimg, title, descr, price}) => {
-      new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
-    });
+  // axios.get('http://localhost:3000/menu')
+  // .then(res => {
+  //   res.data.forEach(({img, altimg, title, descr, price}) => {
+  //     new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
+  //   });
+  // })
+  menu.forEach(({img, altimg, title, descr, price}) => {
+    new CreateCard(img, altimg, title, descr, price, '.menu .container', 'menu__item', 'someClass').createContent();
   })
 }
 

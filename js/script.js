@@ -10,7 +10,6 @@ import timer from './modules/timer';
 import {openModal} from './modules/modal';
 
 
-// window.addEventListener("DOMContentLoaded", () => {  
   
   const modalTimerId = setTimeout(() => openModal('.modal', modalTimerId), 5000);
   
@@ -24,6 +23,7 @@ import {openModal} from './modules/modal';
   
   
   export default modalTimerId;
-// }); //========================== End of file =============================>>>
+
+//========================== End of file =============================>>>
 
 
